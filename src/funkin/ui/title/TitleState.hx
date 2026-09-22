@@ -447,11 +447,11 @@ class TitleState extends MusicBeatState
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 2:
-					createCoolText(['FNF: Ranked'], 15);
+					createCoolText(['FNF Shard Engine'], 15);
 				// credTextShit.visible = true;
 				case 4:
 					#if FINAL_BUILD
-					addMoreText('by RankedTeam', 15);
+					addMoreText('by Shard Team', 15);
 					#else
 					addMoreText('BETA');
 					#end
@@ -495,13 +495,13 @@ class TitleState extends MusicBeatState
 				// credTextShit.text = "Friday";
 				// credTextShit.screenCenter();
 				case 14:
-					addMoreText('Friday Night');
+					addMoreText('Friday');
 				// credTextShit.visible = true;
 				case 15:
-					addMoreText('Funkin');
+					addMoreText('Night');
 				// credTextShit.text += '\nNight';
 				case 16:
-					addMoreText('Ranked'); // credTextShit.text += '\nFunkin';
+					addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
 
 				case 17:
 					skipIntro();

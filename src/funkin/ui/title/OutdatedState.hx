@@ -28,7 +28,7 @@ class OutdatedState extends MusicBeatState
 
 		warnText = new FlxText(0, 0, FlxG.width,
 			"Yo dude, seems like you\n
-			are not running the latest FNF: Ranked\n
+			are not running the latest Shard Engine\n
 			You are using: (" + MainMenuState.rankedVer + "),\n
 			please update to " + TitleState.updateVersion + "!\n
 			Press ESCAPE to proceed anyway.\n
@@ -45,7 +45,7 @@ class OutdatedState extends MusicBeatState
 		if(!leftState) {
 			if (controls.ACCEPT) {
 				leftState = true;
-				CoolUtil.browserLoad("https://github.com/mightycrystal7/FNF-RankedEngine/releases");
+				CoolUtil.browserLoad("https://github.com/mightycrystal7/ShardEngine/releases");
 			}
 			else if(controls.BACK) {
 				leftState = true;
