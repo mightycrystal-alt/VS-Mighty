@@ -2,7 +2,7 @@ package funkin.graphics.shaders;
 
 import flixel.FlxSprite;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 
 class PhillyGlowGradient extends FlxSprite
 {
@@ -16,7 +16,7 @@ class PhillyGlowGradient extends FlxSprite
 		originalY = y;
 
 		loadGraphic(Paths.image('philly/gradient'));
-		antialiasing = ClientPrefs.data.globalAntialiasing;
+		antialiasing = Preferences.data.globalAntialiasing;
 		scrollFactor.set(0, 0.75);
 		setGraphicSize(2000, originalHeight);
 		updateHitbox();

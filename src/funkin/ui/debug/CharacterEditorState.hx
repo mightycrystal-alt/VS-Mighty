@@ -2,7 +2,7 @@ package funkin.ui.debug;
 
 import funkin.animateatlas.AtlasFrameMaker;
 import funkin.graphics.BGSprite;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.CoolUtil;
 import funkin.api.discord.Discord;
 import funkin.ui.flxui.FlxUIDropDownMenuCustom;
@@ -561,7 +561,7 @@ class CharacterEditorState extends MusicBeatState
 		noAntialiasingCheckBox.checked = char.noAntialiasing;
 		noAntialiasingCheckBox.callback = function() {
 			char.antialiasing = false;
-			if(!noAntialiasingCheckBox.checked && ClientPrefs.data.globalAntialiasing) {
+			if(!noAntialiasingCheckBox.checked && Preferences.data.globalAntialiasing) {
 				char.antialiasing = true;
 			}
 			char.noAntialiasing = noAntialiasingCheckBox.checked;

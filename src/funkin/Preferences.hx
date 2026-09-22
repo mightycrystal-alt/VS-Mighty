@@ -6,18 +6,17 @@ import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
 
 import funkin.achievements.Achievements;
-import funkin.input.Controls;
-import funkin.play.PlayState;
-import funkin.play.components.Rating;
 import funkin.ui.title.TitleState;
-class SaveVariables {
-	// -- BEHAVIOR OPTIONS -- //
+
+class PreferenceData {
+	// Engine and accessibility
 	public var autoPause:Bool = true;
 	public var showFPS:Bool = true;
 	public var flashing:Bool = true;
 	public var camZooms:Bool = true;
 	public var globalAntialiasing:Bool = true;
-	// -- GAMEPLAY OPTIONS -- //
+
+	// Note timing and play feel
 	public var downScroll:Bool = false;
 	public var middleScroll:Bool = false;
 	public var ghostTapping:Bool = true;
@@ -32,34 +31,39 @@ class SaveVariables {
 	public var safeFrames:Float = 10;
 	public var npsDisplay:Bool = false;
 
-	// -- VISUAL OPTIONS -- //
+	// HUD and presentation
 	public var hideHud:Bool = false;
+
+	// Audio and feedback
 	public var noteSplashes:Bool = true;
 	public var arrowHSV:Array<Array<Int>> = [
-	  [0, 0, 0], // Left
-	  [0, 0, 0], // DOwn
-	  [0, 0, 0], // Up
-	  [0, 0, 0]  // Right
+		[0, 0, 0], // Left
+		[0, 0, 0], // Down
+		[0, 0, 0], // Up
+		[0, 0, 0]  // Right
 	];
-	public var comboOffset:Array<Int> = [0, 0, 0, 0]; // Rating X and Y, Combo X and Y
+	public var comboOffset:Array<Int> = [0, 0, 0, 0];
 	public var timeBarType:String = 'Time Left';
 	public var healthBarAlpha:Float = 1;
+
+	// Rendering and performance
 	public var lowQuality:Bool = false;
 	public var shaders:Bool = true;
 	public var framerate:Int = 60;
-	// -- FEEDBACK OPTIONS -- //	
+
+	// Audio and feedback
 	public var scoreZoom:Bool = true;
-	public var comboStacking = true;
+	public var comboStacking:Bool = true;
 	public var pauseMusic:String = 'Tea Time';
 	public var hitsoundVolume:Float = 0;
-	// -- OTHER OPTIONS -- //
+
+	// Optional services and legacy compatibility
 	public var checkForUpdates:Bool = true;
 	public var discordRPC:Bool = #if cpp true #else false #end;
-	// -- UNUSED OPTIONS -- //
 	public var cursing:Bool = true;
 	public var violence:Bool = true;
 
-	// -- GAMEPLAY MODIFIERS -- //
+	// Runtime modifiers used by charts and practice tools.
 	public var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
 		'scrolltype' => 'multiplicative', 
@@ -84,9 +88,9 @@ class SaveVariables {
 	public function new() {}
 }
 
-class ClientPrefs {
-	public static var data:SaveVariables = null;
-	public static var defaultData:SaveVariables = null;
+class Preferences {
+	public static var data:PreferenceData = null;
+	public static var defaultData:PreferenceData = null;
 
 	//Every key has two binds, add your key bind down here and then add your control on options/ControlsSubState.hx and Controls.hx
 	public static var keyBinds:Map<String, Array<FlxKey>> = [
@@ -180,8 +184,8 @@ class ClientPrefs {
 	}
 
 	public static function loadPrefs() {
-		if(data == null) data = new SaveVariables();
-		if(defaultData == null) defaultData = new SaveVariables();
+		if(data == null) data = new PreferenceData();
+		if(defaultData == null) defaultData = new PreferenceData();
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 
 		for (key in Reflect.fields(data)) {
@@ -195,7 +199,7 @@ class ClientPrefs {
 			Main.fpsVar.visible = data.showFPS;
 
 		#if (!html5 && !switch)
-		FlxG.autoPause = ClientPrefs.data.autoPause;
+		FlxG.autoPause = Preferences.data.autoPause;
 		#end
 
 		if(data.framerate > FlxG.drawFramerate) {

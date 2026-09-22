@@ -16,7 +16,7 @@ import flixel.FlxCamera;
 import flixel.FlxBasic;
 
 import funkin.Conductor;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.input.Controls;
 import funkin.ui.transition.CustomFadeTransition;
 import funkin.play.PlayState;
@@ -119,7 +119,7 @@ class MusicBeatState extends FlxUIState
 	{
 		var lastChange = Conductor.getBPMFromSeconds(Conductor.songPosition);
 
-		var shit = ((Conductor.songPosition - ClientPrefs.data.noteOffset) - lastChange.songTime) / lastChange.stepCrochet;
+		var shit = ((Conductor.songPosition - Preferences.data.noteOffset) - lastChange.songTime) / lastChange.stepCrochet;
 		curDecStep = lastChange.stepTime + shit;
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}

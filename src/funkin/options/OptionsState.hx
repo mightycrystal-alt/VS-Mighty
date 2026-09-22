@@ -1,7 +1,7 @@
 package funkin.options;
 
 import funkin.graphics.Alphabet;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.api.discord.Discord;
 import funkin.ui.transition.LoadingState;
 import funkin.ui.mainmenu.MainMenuState;
@@ -70,7 +70,7 @@ class OptionsState extends MusicBeatState
 		bg.updateHitbox();
 
 		bg.screenCenter();
-		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
+		bg.antialiasing = Preferences.data.globalAntialiasing;
 		add(bg);
 
 		grpOptions = new FlxTypedGroup<Alphabet>();
@@ -90,14 +90,14 @@ class OptionsState extends MusicBeatState
 		add(selectorRight);
 
 		changeSelection();
-		ClientPrefs.saveSettings();
+		Preferences.saveSettings();
 
 		super.create();
 	}
 
 	override function closeSubState() {
 		super.closeSubState();
-		ClientPrefs.saveSettings();
+		Preferences.saveSettings();
 	}
 
 	override function update(elapsed:Float) {

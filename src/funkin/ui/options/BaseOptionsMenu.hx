@@ -4,7 +4,7 @@ import funkin.graphics.Alphabet;
 import funkin.graphics.AttachedText;
 import funkin.play.character.Character;
 import funkin.ui.CheckboxThingie;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.api.discord.Discord;
 import funkin.ui.MusicBeatSubstate;
 #if hxdiscord_rpc
@@ -61,7 +61,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFFea71fd;
 		bg.screenCenter();
-		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
+		bg.antialiasing = Preferences.data.globalAntialiasing;
 		add(bg);
 
 		// avoids lagspikes while scrolling through menus!
@@ -93,6 +93,17 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		for (i in 0...optionsArray.length)
 		{
 			var optionText:Alphabet = new Alphabet(290, 260, optionsArray[i].name, false);
+			if(optionsArray[i].type == 'category')
+			{
+				optionText = new Alphabet(0, 260, optionsArray[i].name, true);
+				optionText.screenCenter(X);
+				optionText.isMenuItem = true;
+				optionText.changeX = false;
+				optionText.alpha = 0.8;
+				optionText.targetY = i;
+				grpOptions.add(optionText);
+				continue;
+			}
 			optionText.isMenuItem = true;
 			/*optionText.forceX = 300;
 			optionText.yMult = 90;*/
@@ -131,6 +142,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	public function addOption(option:Option) {
 		if(optionsArray == null || optionsArray.length < 1) optionsArray = [];
 		optionsArray.push(option);
+	}
+
+	public function addCategory(name:String) {
+		addOption(new Option(name, '', null, 'category'));
 	}
 
 	var nextAccept:Int = 5;
@@ -246,6 +261,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 				for (i in 0...optionsArray.length)
 				{
 					var leOption:Option = optionsArray[i];
+					if(leOption.type == 'category') continue;
 					leOption.setValue(leOption.defaultValue);
 					if(leOption.type != 'bool')
 					{
@@ -291,10 +307,12 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	function changeSelection(change:Int = 0)
 	{
 		curSelected += change;
-		if (curSelected < 0)
-			curSelected = optionsArray.length - 1;
-		if (curSelected >= optionsArray.length)
-			curSelected = 0;
+		while(optionsArray[curSelected].type == 'category')
+		{
+			curSelected += change < 0 ? -1 : 1;
+			if (curSelected < 0) curSelected = optionsArray.length - 1;
+			if (curSelected >= optionsArray.length) curSelected = 0;
+		}
 
 		descText.text = optionsArray[curSelected].description;
 		descText.screenCenter(Y);

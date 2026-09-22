@@ -30,8 +30,8 @@ class InitState extends flixel.FlxState {
 
         Controls.instance = new Controls();
 
-        ClientPrefs.loadDefaultKeys();
-		ClientPrefs.loadPrefs();
+        Preferences.loadDefaultKeys();
+		Preferences.loadPrefs();
 
         #if ACHIEVEMNTS_ALLOWED
         Achievements.init();

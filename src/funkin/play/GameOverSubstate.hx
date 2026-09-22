@@ -11,7 +11,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 
 import funkin.play.character.Character;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.Conductor;
 import funkin.CoolUtil;
 import funkin.ui.freeplay.FreeplayState;
@@ -125,7 +125,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				coolStartDeath(week7 ? 0.2 : 1.0);
 				if (week7) {
 					var exclude:Array<Int> = [];
-					//if(!ClientPrefs.data.cursing) exclude = [1, 3, 8, 13, 17, 21];
+					//if(!Preferences.data.cursing) exclude = [1, 3, 8, 13, 17, 21];
 					FlxG.sound.play(Paths.sound('jeffGameover/jeffGameover-' + FlxG.random.int(1, 25, exclude)), 1, false, null, true, function() {
 						if(!isEnding) FlxG.sound.music.fadeIn(0.2, 1, 4);
 					});

@@ -6,7 +6,7 @@ import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.gamepad.mappings.FlxGamepadMapping;
 import flixel.input.keyboard.FlxKey;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 class Controls
 {
 	//Keeping same use cases on stuff for it to be easier to understand/use
@@ -162,7 +162,7 @@ class Controls
 	public static var instance:Controls;
 	public function new()
 	{
-		keyboardBinds = ClientPrefs.keyBinds;
-		gamepadBinds = ClientPrefs.gamepadBinds;
+		keyboardBinds = Preferences.keyBinds;
+		gamepadBinds = Preferences.gamepadBinds;
 	}
 }

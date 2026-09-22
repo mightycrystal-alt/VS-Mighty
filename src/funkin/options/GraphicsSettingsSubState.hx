@@ -1,6 +1,6 @@
 package funkin.options;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.api.discord.Discord;
 #if hxdiscord_rpc
 import funkin.api.discord.Discord.DiscordClient;
@@ -78,22 +78,22 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 			var sprite:Dynamic = sprite; //Make it check for FlxSprite instead of FlxBasic
 			var sprite:FlxSprite = sprite; //Don't judge me ok
 			if(sprite != null && (sprite is FlxSprite) && !(sprite is FlxText)) {
-				sprite.antialiasing = ClientPrefs.data.globalAntialiasing;
+				sprite.antialiasing = Preferences.data.globalAntialiasing;
 			}
 		}
 	}
 
 	function onChangeFramerate()
 	{
-		if(ClientPrefs.data.framerate > FlxG.drawFramerate)
+		if(Preferences.data.framerate > FlxG.drawFramerate)
 		{
-			FlxG.updateFramerate = ClientPrefs.data.framerate;
-			FlxG.drawFramerate = ClientPrefs.data.framerate;
+			FlxG.updateFramerate = Preferences.data.framerate;
+			FlxG.drawFramerate = Preferences.data.framerate;
 		}
 		else
 		{
-			FlxG.drawFramerate = ClientPrefs.data.framerate;
-			FlxG.updateFramerate = ClientPrefs.data.framerate;
+			FlxG.drawFramerate = Preferences.data.framerate;
+			FlxG.updateFramerate = Preferences.data.framerate;
 		}
 	}
 }

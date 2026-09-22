@@ -9,7 +9,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
 import funkin.play.components.Section.SwagSection;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.Conductor;
 import funkin.play.PlayState;
 import funkin.play.components.Section;
@@ -92,7 +92,7 @@ class Character extends FlxSprite
 		animOffsets = new Map<String, Array<Dynamic>>();
 		curCharacter = character;
 		this.isPlayer = isPlayer;
-		antialiasing = ClientPrefs.data.globalAntialiasing;
+		antialiasing = Preferences.data.globalAntialiasing;
 		var library:String = null;
 		switch (curCharacter)
 		{
@@ -159,7 +159,7 @@ class Character extends FlxSprite
 					healthColorArray = json.healthbar_colors;
 
 				antialiasing = !noAntialiasing;
-				if(!ClientPrefs.data.globalAntialiasing) antialiasing = false;
+				if(!Preferences.data.globalAntialiasing) antialiasing = false;
 
 				animationsArray = json.animations;
 				if(animationsArray != null && animationsArray.length > 0) {

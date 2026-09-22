@@ -3,7 +3,7 @@ package funkin.graphics;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 class BGSprite extends FlxSprite
 {
 	private var idleAnim:String;
@@ -27,7 +27,7 @@ class BGSprite extends FlxSprite
 			active = false;
 		}
 		scrollFactor.set(scrollX, scrollY);
-		antialiasing = ClientPrefs.data.globalAntialiasing;
+		antialiasing = Preferences.data.globalAntialiasing;
 	}
 
 	public function dance(?forceplay:Bool = false) {

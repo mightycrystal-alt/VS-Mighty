@@ -15,7 +15,7 @@ import flixel.FlxCamera;
 import flixel.util.FlxStringUtil;
 
 import funkin.graphics.Alphabet;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.Conductor;
 import funkin.CoolUtil;
 import funkin.ui.freeplay.FreeplayState;
@@ -74,7 +74,7 @@ class PauseSubState extends MusicBeatSubstate
 		if(songName != null) {
 			pauseMusic.loadEmbedded(Paths.music(songName), true, true);
 		} else if (songName != 'None') {
-			pauseMusic.loadEmbedded(Paths.music(Paths.formatToSongPath(ClientPrefs.data.pauseMusic)), true, true);
+			pauseMusic.loadEmbedded(Paths.music(Paths.formatToSongPath(Preferences.data.pauseMusic)), true, true);
 		}
 		pauseMusic.volume = 0;
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));

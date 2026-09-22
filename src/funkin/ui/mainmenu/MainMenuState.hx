@@ -1,7 +1,7 @@
 package funkin.ui.mainmenu;
 
 import funkin.achievements.AchievementsMenuState;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.CoolUtil;
 import funkin.ui.credits.CreditsState;
 import funkin.api.discord.Discord;
@@ -63,7 +63,7 @@ class MainMenuState extends MusicBeatState
 	{
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
-		debugKeys = ClientPrefs.keyBinds.get('debug_1').copy();
+		debugKeys = Preferences.keyBinds.get('debug_1').copy();
 
 		camGame = new FlxCamera();
 		camAchievement = new FlxCamera();
@@ -84,7 +84,7 @@ class MainMenuState extends MusicBeatState
 		bg.setGraphicSize(Std.int(bg.width * 1.175));
 		bg.updateHitbox();
 		bg.screenCenter();
-		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
+		bg.antialiasing = Preferences.data.globalAntialiasing;
 		add(bg);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -98,7 +98,7 @@ class MainMenuState extends MusicBeatState
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
-		magenta.antialiasing = ClientPrefs.data.globalAntialiasing;
+		magenta.antialiasing = Preferences.data.globalAntialiasing;
 		magenta.color = 0xFFfd719b;
 		add(magenta);
 		
@@ -128,7 +128,7 @@ class MainMenuState extends MusicBeatState
 			var scr:Float = (optionShit.length - 4) * 0.135;
 			if(optionShit.length < 6) scr = 0;
 			menuItem.scrollFactor.set(0, scr);
-			menuItem.antialiasing = ClientPrefs.data.globalAntialiasing;
+			menuItem.antialiasing = Preferences.data.globalAntialiasing;
 			//menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
 			menuItem.updateHitbox();
 		}

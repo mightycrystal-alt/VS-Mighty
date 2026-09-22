@@ -16,7 +16,7 @@ import lime.utils.AssetManifest;
 
 import haxe.io.Path;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.ui.MusicBeatState;
 import funkin.play.PlayState;
 import funkin.data.StageData;
@@ -54,14 +54,14 @@ class LoadingState extends MusicBeatState
 		funkay = new FlxSprite(0, 0).loadGraphic(Paths.getPath('images/funkay.png', IMAGE));
 		funkay.setGraphicSize(0, FlxG.height);
 		funkay.updateHitbox();
-		funkay.antialiasing = ClientPrefs.data.globalAntialiasing;
+		funkay.antialiasing = Preferences.data.globalAntialiasing;
 		add(funkay);
 		funkay.scrollFactor.set();
 		funkay.screenCenter();
 
 		loadBar = new FlxSprite(0, FlxG.height - 20).makeGraphic(FlxG.width, 10, 0xffff16d2);
 		loadBar.screenCenter(X);
-		loadBar.antialiasing = ClientPrefs.data.globalAntialiasing;
+		loadBar.antialiasing = Preferences.data.globalAntialiasing;
 		add(loadBar);
 		
 		initSongsManifest().onComplete

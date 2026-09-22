@@ -1,7 +1,7 @@
 package funkin.ui.debug;
 
 import funkin.play.character.Character;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.api.discord.Discord;
 import funkin.ui.flxui.FlxUIDropDownMenuCustom;
 import funkin.ui.MusicBeatState;
@@ -122,7 +122,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 		box = new FlxSprite(70, 370);
 		box.frames = Paths.getSparrowAtlas('speech_bubble');
 		box.scrollFactor.set();
-		box.antialiasing = ClientPrefs.data.globalAntialiasing;
+		box.antialiasing = Preferences.data.globalAntialiasing;
 		box.animation.addByPrefix('normal', 'speech bubble normal', 24);
 		box.animation.addByPrefix('center', 'speech bubble middle', 24);
 		box.animation.play('normal', true);

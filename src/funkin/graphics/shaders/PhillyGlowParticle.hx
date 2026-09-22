@@ -4,7 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 
 class PhillyGlowParticle extends FlxSprite
 {
@@ -18,10 +18,10 @@ class PhillyGlowParticle extends FlxSprite
 		this.color = color;
 
 		loadGraphic(Paths.image('philly/particle'));
-		antialiasing = ClientPrefs.data.globalAntialiasing;
+		antialiasing = Preferences.data.globalAntialiasing;
 		lifeTime = FlxG.random.float(0.6, 0.9);
 		decay = FlxG.random.float(0.8, 1);
-		if (!ClientPrefs.data.flashing)
+		if (!Preferences.data.flashing)
 		{
 			decay *= 0.5;
 			alpha = 0.5;

@@ -1,6 +1,6 @@
 package funkin.ui.options;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.api.discord.Discord;
 import funkin.play.components.Note;
 import funkin.play.Song;
@@ -127,10 +127,10 @@ class VisualsUISubState extends BaseOptionsMenu
 	var changedMusic:Bool = false;
 	function onChangePauseMusic()
 	{
-		if(ClientPrefs.data.pauseMusic == 'None')
+		if(Preferences.data.pauseMusic == 'None')
 			FlxG.sound.music.volume = 0;
 		else
-			FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath(ClientPrefs.data.pauseMusic)));
+			FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath(Preferences.data.pauseMusic)));
 
 		changedMusic = true;
 	}
@@ -145,7 +145,7 @@ class VisualsUISubState extends BaseOptionsMenu
 	function onChangeFPSCounter()
 	{
 		if(Main.fpsVar != null)
-			Main.fpsVar.visible = ClientPrefs.data.showFPS;
+			Main.fpsVar.visible = Preferences.data.showFPS;
 	}
 	#end
 }

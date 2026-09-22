@@ -1,6 +1,6 @@
 package funkin.options;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.api.discord.Discord;
 import funkin.play.components.Rating;
 #if hxdiscord_rpc
@@ -137,6 +137,6 @@ var option:Option = new Option('NPS Display',
 
 	function onChangeHitsoundVolume()
 	{
-		FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.data.hitsoundVolume);
+		FlxG.sound.play(Paths.sound('hitsound'), Preferences.data.hitsoundVolume);
 	}
 }

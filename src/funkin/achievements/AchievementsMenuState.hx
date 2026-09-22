@@ -3,7 +3,7 @@ package funkin.achievements;
 import funkin.achievements.Achievements.Achievement;
 import funkin.graphics.Alphabet;
 import funkin.graphics.AttachedSprite;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.CoolUtil;
 import funkin.api.discord.Discord;
 import funkin.ui.mainmenu.MainMenuState;
@@ -69,7 +69,7 @@ class AchievementsMenuState extends MusicBeatState
 		FlxG.camera.scroll.y = -FlxG.height;
 
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
-		menuBG.antialiasing = ClientPrefs.data.globalAntialiasing;
+		menuBG.antialiasing = Preferences.data.globalAntialiasing;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
@@ -82,7 +82,7 @@ class AchievementsMenuState extends MusicBeatState
 		options.sort(sortByID);
 		for (option in options)
 		{
-			var hasAntialias:Bool = ClientPrefs.data.globalAntialiasing;
+			var hasAntialias:Bool = Preferences.data.globalAntialiasing;
 			var graphic = null;
 			if(option.unlocked)
 			{
@@ -359,7 +359,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 				option.name = state.nameText.text = '???';
 				if(option.maxProgress > 0) state.progressTxt.text = '0 / ' + option.maxProgress;
 				state.grpOptions.members[state.curSelected].loadGraphic(Paths.image('achievements/lockedachievement'));
-				state.grpOptions.members[state.curSelected].antialiasing = ClientPrefs.data.globalAntialiasing;
+				state.grpOptions.members[state.curSelected].antialiasing = Preferences.data.globalAntialiasing;
 
 				if(state.progressBar.visible)
 				{

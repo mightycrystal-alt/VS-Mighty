@@ -6,7 +6,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.CoolUtil;
 import funkin.data.WeekData;
 class MenuItem extends FlxSprite
@@ -19,7 +19,7 @@ class MenuItem extends FlxSprite
 		super(x, y);
 		loadGraphic(Paths.image('storymenu/' + weekName));
 		//trace('Test added: ' + WeekData.getWeekNumber(weekNum) + ' (' + weekNum + ')');
-		antialiasing = ClientPrefs.data.globalAntialiasing;
+		antialiasing = Preferences.data.globalAntialiasing;
 	}
 
 	private var isFlashing:Bool = false;

@@ -3,7 +3,7 @@ package funkin.ui;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 class CheckboxThingie extends FlxSprite
 {
 	public var sprTracker:FlxSprite;
@@ -20,7 +20,7 @@ class CheckboxThingie extends FlxSprite
 		animation.addByPrefix("checking", "checkbox anim0", 24, false);
 		animation.addByPrefix("checked", "checkbox finish", 24, false);
 
-		antialiasing = ClientPrefs.data.globalAntialiasing;
+		antialiasing = Preferences.data.globalAntialiasing;
 		setGraphicSize(Std.int(0.9 * width));
 		updateHitbox();
 

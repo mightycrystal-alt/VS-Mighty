@@ -4,7 +4,7 @@ import funkin.graphics.Alphabet;
 import funkin.graphics.AttachedText;
 import funkin.play.character.Character;
 import funkin.ui.CheckboxThingie;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.api.discord.Discord;
 import funkin.ui.MusicBeatSubstate;
 #if hxdiscord_rpc
@@ -61,7 +61,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFFea71fd;
 		bg.screenCenter();
-		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
+		bg.antialiasing = Preferences.data.globalAntialiasing;
 		add(bg);
 
 		// avoids lagspikes while scrolling through menus!

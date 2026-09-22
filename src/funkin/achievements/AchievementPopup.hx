@@ -1,6 +1,6 @@
 package funkin.achievements;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 #if ACHIEVEMENTS_ALLOWED
 import openfl.events.Event;
 import openfl.geom.Matrix;
@@ -28,7 +28,7 @@ class AchievementPopup extends openfl.display.Sprite {
 
 		// achievement icon
 		var graphic = null;
-		var hasAntialias:Bool = ClientPrefs.data.globalAntialiasing;
+		var hasAntialias:Bool = Preferences.data.globalAntialiasing;
 		var image:String = 'achievements/$achieve';
 		
 		var achievement:Achievement = null;

@@ -10,7 +10,7 @@ import flixel.util.FlxTimer;
 import flixel.sound.FlxSound;
 import flash.media.Sound;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.play.Song;
 using StringTools;
 
@@ -330,7 +330,7 @@ class AlphaCharacter extends FlxSprite
 		super(x, y);
 		this.parent = parent;
 		image = 'alphabet';
-		antialiasing = ClientPrefs.data.globalAntialiasing;
+		antialiasing = Preferences.data.globalAntialiasing;
 
 		var curLetter:Letter = allLetters.get('?');
 		var lowercase = character.toLowerCase();

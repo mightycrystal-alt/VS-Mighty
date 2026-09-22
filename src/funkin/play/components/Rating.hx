@@ -1,6 +1,6 @@
 package funkin.play.components;
 
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.play.PlayState;
 class Rating
 {
@@ -17,7 +17,7 @@ class Rating
 		this.name = name;
 		this.image = name;
 		this.counter = name + 's';
-		this.hitWindow = Reflect.field(ClientPrefs.data, name + 'Window');
+		this.hitWindow = Reflect.field(Preferences.data, name + 'Window');
 		if(hitWindow == null)
 		{
 			hitWindow = 0;

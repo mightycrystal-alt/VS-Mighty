@@ -2,7 +2,7 @@ package funkin.ui.freeplay;
 
 import funkin.graphics.Alphabet;
 import funkin.ui.debug.charting.ChartingState;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.CoolUtil;
 import funkin.api.discord.Discord;
 import funkin.ui.options.changers.GameplayChangersSubstate;
@@ -112,7 +112,7 @@ class FreeplayState extends MusicBeatState
 		}*/
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
+		bg.antialiasing = Preferences.data.globalAntialiasing;
 		add(bg);
 		bg.screenCenter();
 

@@ -9,7 +9,7 @@ import flash.display.BitmapData;
 import funkin.ui.debug.charting.ChartingState;
 
 import funkin.ui.debug.charting.ChartingState;
-import funkin.ClientPrefs;
+import funkin.Preferences;
 import funkin.graphics.ColorSwap;
 import funkin.Conductor;
 import funkin.play.PlayState;
@@ -130,11 +130,11 @@ class Note extends FlxSprite
 	private function set_noteType(value:String):String
 	{
 		noteSplashTexture = PlayState.SONG.splashSkin;
-		if (noteData > -1 && noteData < ClientPrefs.data.arrowHSV.length)
+		if (noteData > -1 && noteData < Preferences.data.arrowHSV.length)
 		{
-			colorSwap.hue = ClientPrefs.data.arrowHSV[noteData][0] / 360;
-			colorSwap.saturation = ClientPrefs.data.arrowHSV[noteData][1] / 100;
-			colorSwap.brightness = ClientPrefs.data.arrowHSV[noteData][2] / 100;
+			colorSwap.hue = Preferences.data.arrowHSV[noteData][0] / 360;
+			colorSwap.saturation = Preferences.data.arrowHSV[noteData][1] / 100;
+			colorSwap.brightness = Preferences.data.arrowHSV[noteData][2] / 100;
 		}
 
 		if (noteData > -1 && noteType != value)
@@ -188,12 +188,12 @@ class Note extends FlxSprite
 		isSustainNote = sustainNote;
 		this.inEditor = inEditor;
 
-		x += (ClientPrefs.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X) + 50;
+		x += (Preferences.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X) + 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 		this.strumTime = strumTime;
 		if (!inEditor)
-			this.strumTime += ClientPrefs.data.noteOffset;
+			this.strumTime += Preferences.data.noteOffset;
 
 		this.noteData = noteData;
 
@@ -222,7 +222,7 @@ class Note extends FlxSprite
 			alpha = 0.6;
 			multAlpha = 0.6;
 			hitsoundDisabled = true;
-			if (ClientPrefs.data.downScroll)
+			if (Preferences.data.downScroll)
 				flipY = true;
 
 			offsetX += width / 2;
@@ -343,7 +343,7 @@ class Note extends FlxSprite
 		{
 			frames = Paths.getSparrowAtlas(blahblah);
 			loadNoteAnims();
-			antialiasing = ClientPrefs.data.globalAntialiasing;
+			antialiasing = Preferences.data.globalAntialiasing;
 		}
 		if (isSustainNote)
 		{
