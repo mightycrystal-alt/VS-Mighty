@@ -1108,7 +1108,7 @@ class PlayState extends MusicBeatState
 		reloadHealthBarColors();
 
 		scoreTxt = new FlxText(800, healthBarBG.y + 36, FlxG.width * 0.34, "", 20);
-		scoreTxt.setFormat(Paths.font("ten.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
 		scoreTxt.visible = !Preferences.data.hideHud;
@@ -1117,21 +1117,21 @@ class PlayState extends MusicBeatState
 		// FOR THE LOVE OF GOD WHY CANT A PART OF THIS STUPID TEXT BE COLOURED INDEPENDENTLY FROM THE REST
 
 		missesTxt = new FlxText(FlxG.width * 0.33, healthBarBG.y + 36, FlxG.width * 0.34, "", 20);
-		missesTxt.setFormat(Paths.font("ten.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		missesTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		missesTxt.scrollFactor.set();
 		missesTxt.borderSize = 1.25;
 		missesTxt.visible = !Preferences.data.hideHud;
 		uiGroup.add(missesTxt);
 
 		accuracyTxt = new FlxText(90, healthBarBG.y + 36, FlxG.width * 0.34, "", 20);
-		accuracyTxt.setFormat(Paths.font("ten.ttf"), 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		accuracyTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		accuracyTxt.scrollFactor.set();
 		accuracyTxt.borderSize = 1.25;
 		accuracyTxt.visible = !Preferences.data.hideHud;
 		uiGroup.add(accuracyTxt);
 
 		comboRating = new FlxText(accuracyTxt.x + accuracyTxt.width, healthBarBG.y + 36, 120, "", 20);
-		comboRating.setFormat(Paths.font("ten.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		comboRating.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		comboRating.scrollFactor.set();
 		comboRating.borderSize = 1.25;
 		comboRating.visible = !Preferences.data.hideHud;
