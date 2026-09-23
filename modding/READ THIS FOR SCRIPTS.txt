@@ -1,10 +1,16 @@
 ShardEngine HScript support
 
-Put menu .hx or .hxc scripts in scripts/mainmenu/ and gameplay scripts in
-scripts/song/.... the same folders can be used inside a mod folder. Gameplay
-scripts can also be placed in the active song folder at data/<song-name>/.
+Put .hx or .hxc scripts in the matching folder:
+  scripts/mainmenu/  MainMenuState
+  scripts/title/     TitleState
+  scripts/freeplay/  FreeplayState
+  scripts/options/   OptionsState
+  scripts/song/      PlayState
 
-main menu scripts run on main menu while song scripts.... self explanatory
+The same folders can be used inside a mod folder. Gameplay scripts can also
+be placed in the active song folder at data/<song-name>/.
+
+Scripts run only while their matching state is active.
 
 Available callbacks:
   onCreate(state)

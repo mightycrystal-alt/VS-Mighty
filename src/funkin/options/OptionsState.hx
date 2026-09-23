@@ -58,6 +58,8 @@ class OptionsState extends MusicBeatState
 	var selectorRight:Alphabet;
 
 	override function create() {
+		super.create();
+
 		#if hxdiscord_rpc
 		DiscordClient.changePresence("Options Menu", null);
 		#end
@@ -89,7 +91,6 @@ class OptionsState extends MusicBeatState
 		changeSelection();
 		Preferences.saveSettings();
 
-		super.create();
 	}
 
 	override function closeSubState() {
