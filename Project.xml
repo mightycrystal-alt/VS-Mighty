@@ -100,7 +100,7 @@
 	-->
 	<assets path="assets/fonts" />
 
-	<assets path='modding' embed='false'/>
+	<assets path='modding' embed='true'/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

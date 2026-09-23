@@ -120,8 +120,8 @@ class Song
 		var formattedFolder:String = Paths.formatToSongPath(folder);
 		var formattedSong:String = Paths.formatToSongPath(jsonInput);
 		if (jsonInput != 'events') {
-			var modPath:String = Paths.modsJson(formattedFolder + '/' + formattedSong);
-			if (FileSystem.exists(modPath)) rawJson = File.getContent(modPath).trim();
+			var modKey:String = 'data/' + formattedFolder + '/' + formattedSong + '.json';
+			if (Paths.fileExists(modKey, TEXT)) rawJson = Paths.getTextFromFile(modKey).trim();
 		}
 		if(rawJson == null) {
 			rawJson = Assets.getText(Paths.json(formattedFolder + '/' + formattedSong)).trim();

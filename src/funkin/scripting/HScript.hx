@@ -28,6 +28,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import openfl.display.BlendMode;
 import openfl.utils.Assets;
+import openfl.utils.Assets as OpenFlAssets;
 import lime.app.Application;
 import Main;
 import funkin.Conductor;
@@ -206,47 +207,80 @@ class HScript
 	#if sys
 	private static function loadDirectory(directory:String, state:Dynamic):Void
 	{
-		if (!FileSystem.exists(directory) || !FileSystem.isDirectory(directory)) return;
-		for (file in FileSystem.readDirectory(directory))
+		if (FileSystem.exists(directory) && FileSystem.isDirectory(directory))
 		{
-			var lowerName:String = file.toLowerCase();
-			if (lowerName.endsWith('.hx') || lowerName.endsWith('.hxc'))
+			for (file in FileSystem.readDirectory(directory))
 			{
-				execute(File.getContent('$directory/$file'), '$directory/$file', state);
+				var lowerName:String = file.toLowerCase();
+				if (lowerName.endsWith('.hx') || lowerName.endsWith('.hxc'))
+					execute(File.getContent('$directory/$file'), '$directory/$file', state);
 			}
+			return;
 		}
+		loadEmbeddedDirectory(directory, state);
 	}
 
 	private static function loadStageDirectory(directory:String, stage:String, state:Dynamic):Void
 	{
-		if (!FileSystem.exists(directory) || !FileSystem.isDirectory(directory)) return;
-		for (file in FileSystem.readDirectory(directory))
+		if (FileSystem.exists(directory) && FileSystem.isDirectory(directory))
 		{
-			var extension:String = Path.extension(file).toLowerCase();
-			var stageName:String = Path.withoutExtension(file);
-			if ((extension == 'hx' || extension == 'hxc') && stageName.toLowerCase() == stage.toLowerCase())
+			for (file in FileSystem.readDirectory(directory))
 			{
-				execute(File.getContent('$directory/$file'), '$directory/$file', state);
+				var extension:String = Path.extension(file).toLowerCase();
+				var stageName:String = Path.withoutExtension(file);
+				if ((extension == 'hx' || extension == 'hxc') && stageName.toLowerCase() == stage.toLowerCase())
+					execute(File.getContent('$directory/$file'), '$directory/$file', state);
 			}
+			return;
 		}
+		loadEmbeddedDirectory(directory, state, stage);
 	}
 
 	private static function loadCustomNoteDirectory(directory:String, state:Dynamic):Void
 	{
-		if (!FileSystem.exists(directory) || !FileSystem.isDirectory(directory)) return;
-		for (file in FileSystem.readDirectory(directory))
+		if (FileSystem.exists(directory) && FileSystem.isDirectory(directory))
 		{
-			var lowerName:String = file.toLowerCase();
-			if (lowerName.endsWith('.hx') || lowerName.endsWith('.hxc'))
+			for (file in FileSystem.readDirectory(directory))
+			{
+				var lowerName:String = file.toLowerCase();
+				if (lowerName.endsWith('.hx') || lowerName.endsWith('.hxc'))
+				{
+					var noteName:String = Path.withoutExtension(file);
+					var interp:Interp = executeScript(File.getContent('$directory/$file'), '$directory/$file', state);
+					if (interp != null)
+					{
+						if (!customNoteScripts.exists(noteName)) customNoteScripts.set(noteName, []);
+						customNoteScripts.get(noteName).push(interp);
+					}
+				}
+			}
+			return;
+		}
+		loadEmbeddedDirectory(directory, state, null, true);
+	}
+
+	private static function loadEmbeddedDirectory(directory:String, state:Dynamic, ?stage:String, ?customNote:Bool = false):Void
+	{
+		var prefix:String = directory.replace('\\', '/');
+		if (!prefix.startsWith('modding/')) return;
+		for (file in OpenFlAssets.list())
+		{
+			if (!file.startsWith(prefix + '/') || file.indexOf('/', prefix.length + 1) >= 0) continue;
+			var extension:String = Path.extension(file).toLowerCase();
+			var fileName:String = Path.withoutExtension(file);
+			if ((extension != 'hx' && extension != 'hxc') || (stage != null && fileName.toLowerCase() != stage.toLowerCase())) continue;
+			if (customNote)
 			{
 				var noteName:String = Path.withoutExtension(file);
-				var interp:Interp = executeScript(File.getContent('$directory/$file'), '$directory/$file', state);
+				var interp:Interp = executeScript(OpenFlAssets.getText(file), file, state);
 				if (interp != null)
 				{
 					if (!customNoteScripts.exists(noteName)) customNoteScripts.set(noteName, []);
 					customNoteScripts.get(noteName).push(interp);
 				}
 			}
+			else
+				execute(OpenFlAssets.getText(file), file, state);
 		}
 	}
 	#end

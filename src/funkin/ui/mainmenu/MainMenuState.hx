@@ -40,6 +40,7 @@ class MainMenuState extends MusicBeatState
 {
 	public static var rankedVer:String = '0.1.0';
 	public static var curSelected:Int = 0;
+	public static var engineName:String = 'Shard Engine';
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 	private var camGame:FlxCamera;
@@ -139,7 +140,7 @@ class MainMenuState extends MusicBeatState
 
 		#if !FINAL_BUILD
 		#if !debug
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Shard Engine v" + rankedVer + " (Unstable)", 12);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, engineName + " v" + rankedVer + " (Unstable)", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);

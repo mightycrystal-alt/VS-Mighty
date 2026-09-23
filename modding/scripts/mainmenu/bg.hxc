@@ -1,0 +1,22 @@
+var addedBackground:Bool = false;
+
+function create() {
+    MainMenuState.rankedVer = '0.1';
+    MainMenuState.engineName = 'VS Mighty';
+}
+
+function onUpdate(elapsed:Float)
+{
+    if (addedBackground) return;
+
+    var background:FlxSprite = new FlxSprite(-80);
+    background.loadGraphic(Paths.image('menuMighty'));
+    background.scrollFactor.set(0, 0.25);
+    background.setGraphicSize(Std.int(background.width * 1.175));
+    background.updateHitbox();
+    background.screenCenter();
+    background.antialiasing = Preferences.data.globalAntialiasing;
+
+    state.insert(2, background);
+    addedBackground = true;
+}

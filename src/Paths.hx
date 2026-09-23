@@ -178,6 +178,8 @@ class Paths
 	{
 		var modPath:String = modsVideo(key);
 		if (FileSystem.exists(modPath)) return modPath;
+		var embeddedPath:String = embeddedModPath('videos/$key.$VIDEO_EXT', BINARY);
+		if (embeddedPath != null) return embeddedPath;
 		return 'assets/videos/$key.$VIDEO_EXT';
 	}
 
@@ -235,6 +237,10 @@ class Paths
 		var preloadPath:String = getPreloadPath(key);
 		if (FileSystem.exists(preloadPath)) return File.getContent(preloadPath);
 		#end
+		if (!ignoreMods) {
+			var embeddedPath:String = embeddedModPath(key, TEXT);
+			if (embeddedPath != null) return OpenFlAssets.getText(embeddedPath);
+		}
 		return Assets.getText(getPath(key, TEXT));
 	}
 
@@ -242,12 +248,15 @@ class Paths
 	{
 		var modPath:String = modsFont(key);
 		if (FileSystem.exists(modPath)) return modPath;
+		var embeddedPath:String = embeddedModPath('fonts/$key', FONT);
+		if (embeddedPath != null) return embeddedPath;
 		return 'assets/fonts/$key';
 	}
 
 	inline static public function fileExists(key:String, type:AssetType, ?library:String)
 	{
 		if (FileSystem.exists(modFolders(key))) return true;
+		if (embeddedModPath(key, type) != null) return true;
 		if(OpenFlAssets.exists(getPath(key, type))) {
 			return true;
 		}
@@ -259,6 +268,9 @@ class Paths
 		var modXml:String = modsXml(key);
 		if (FileSystem.exists(modXml))
 			return FlxAtlasFrames.fromSparrow(image(key, library), File.getContent(modXml));
+		var embeddedXml:String = embeddedModPath('images/$key.xml', TEXT);
+		if (embeddedXml != null)
+			return FlxAtlasFrames.fromSparrow(image(key, library), OpenFlAssets.getText(embeddedXml));
 		return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$key.xml', library));
 	}
 
@@ -268,6 +280,9 @@ class Paths
 		var modTxt:String = modsTxt(key);
 		if (FileSystem.exists(modTxt))
 			return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), File.getContent(modTxt));
+		var embeddedTxt:String = embeddedModPath('images/$key.txt', TEXT);
+		if (embeddedTxt != null)
+			return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), OpenFlAssets.getText(embeddedTxt));
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
 	}
 
@@ -293,6 +308,16 @@ class Paths
 			localTrackedAssets.push(modPath);
 			return currentTrackedAssets.get(modPath);
 		}
+		var embeddedPath:String = embeddedModPath('images/$key.png', IMAGE);
+		if (embeddedPath != null) {
+			if (!currentTrackedAssets.exists(embeddedPath)) {
+				var embeddedGraphic:FlxGraphic = FlxG.bitmap.add(embeddedPath, false, embeddedPath);
+				embeddedGraphic.persist = true;
+				currentTrackedAssets.set(embeddedPath, embeddedGraphic);
+			}
+			localTrackedAssets.push(embeddedPath);
+			return currentTrackedAssets.get(embeddedPath);
+		}
 		var path = getPath('images/$key.png', IMAGE, library);
 		//trace(path);
 		if (OpenFlAssets.exists(path, IMAGE)) {
@@ -317,6 +342,13 @@ class Paths
 			localTrackedAssets.push(modPath);
 			return currentTrackedSounds.get(modPath);
 		}
+		var embeddedPath:String = embeddedModPath('$path/$key.$SOUND_EXT', SOUND);
+		if (embeddedPath != null) {
+			if (!currentTrackedSounds.exists(embeddedPath))
+				currentTrackedSounds.set(embeddedPath, OpenFlAssets.getSound(embeddedPath));
+			localTrackedAssets.push(embeddedPath);
+			return currentTrackedSounds.get(embeddedPath);
+		}
 		// I hate this so god damn much
 		var gottenPath:String = getPath('$path/$key.$SOUND_EXT', SOUND, library);
 		gottenPath = gottenPath.substring(gottenPath.indexOf(':') + 1, gottenPath.length);
@@ -339,6 +371,20 @@ class Paths
 	inline static public function modsImages(key:String):String return modFolders('images/' + key + '.png');
 	inline static public function modsXml(key:String):String return modFolders('images/' + key + '.xml');
 	inline static public function modsTxt(key:String):String return modFolders('images/' + key + '.txt');
+
+	static function embeddedModPath(key:String, type:AssetType):Null<String> {
+		var candidates:Array<String> = [];
+		if (currentModDirectory != null && currentModDirectory.length > 0)
+			candidates.push(currentModDirectory + '/' + key);
+		for (mod in globalMods)
+			candidates.push(mod + '/' + key);
+		candidates.push(key);
+		for (candidate in candidates) {
+			var path:String = 'modding/$candidate';
+			if (OpenFlAssets.exists(path, type) || OpenFlAssets.exists(path)) return path;
+		}
+		return null;
+	}
 
 	static public function modFolders(key:String):String {
 		if (currentModDirectory != null && currentModDirectory.length > 0) {
