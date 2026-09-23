@@ -44,7 +44,10 @@ import funkin.play.components.HealthIcon;
 import funkin.play.components.Note;
 import funkin.play.components.StrumNote;
 import funkin.graphics.Alphabet;
+import funkin.ui.freeplay.FreeplayState;
 import funkin.ui.mainmenu.MainMenuState;
+import funkin.options.OptionsState;
+import funkin.ui.title.TitleState;
 
 using StringTools;
 
@@ -128,6 +131,12 @@ class HScript
 			scriptFolder = 'song';
 		else if (Std.isOfType(state, MainMenuState))
 			scriptFolder = 'mainmenu';
+		else if (Std.isOfType(state, TitleState))
+			scriptFolder = 'title';
+		else if (Std.isOfType(state, FreeplayState))
+			scriptFolder = 'freeplay';
+		else if (Std.isOfType(state, OptionsState))
+			scriptFolder = 'options';
 
 		if (scriptFolder != null)
 		{
@@ -459,6 +468,8 @@ class HScript
 			'PlayState' => PlayState,
 			'MainMenuState' => MainMenuState,
 			'TitleState' => funkin.ui.title.TitleState,
+			'FreeplayState' => FreeplayState,
+			'OptionsState' => OptionsState,
 			'Song' => Song,
 			'Character' => Character,
 			'HealthIcon' => HealthIcon,

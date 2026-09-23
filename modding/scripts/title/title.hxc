@@ -1,0 +1,4 @@
+
+function onCreate() {
+    Application.current.window.title = 'FNF: VS Mighty (Shard Engine)';
+}

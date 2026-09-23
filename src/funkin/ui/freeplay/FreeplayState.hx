@@ -63,6 +63,8 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		super.create();
+
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();
 		
@@ -205,7 +207,6 @@ class FreeplayState extends MusicBeatState
 		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, RIGHT);
 		text.scrollFactor.set();
 		add(text);
-		super.create();
 	}
 
 	override function closeSubState() {

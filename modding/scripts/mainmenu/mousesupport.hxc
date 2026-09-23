@@ -1,0 +1,25 @@
+var mouseWasOver:Int = -1;
+
+function create()
+{
+	FlxG.mouse.visible = true;
+}
+
+function onUpdate(elapsed:Float)
+{
+	if (state.menuItems == null || state.menuItems.members == null) return;
+
+	var hovered:Int = -1;
+	state.menuItems.forEachAlive(function(menuItem:FlxSprite)
+	{
+		if (FlxG.mouse.overlaps(menuItem)) hovered = menuItem.ID;
+	});
+
+	if (hovered >= 0)
+	{
+		if (hovered != MainMenuState.curSelected)
+			state.selectMenuItem(hovered);
+		if (FlxG.mouse.justPressed)
+			state.mouseAccept = true;
+	}
+}

@@ -41,15 +41,16 @@ class MainMenuState extends MusicBeatState
 	public static var rankedVer:String = '0.1.0';
 	public static var curSelected:Int = 0;
 	public static var engineName:String = 'Shard Engine';
+	public static var menuItemScreenCenter:Bool = true;
 
-	var menuItems:FlxTypedGroup<FlxSprite>;
+	public var menuItems:FlxTypedGroup<FlxSprite>;
 	private var camGame:FlxCamera;
 	private var camAchievement:FlxCamera;
 	
 	var optionShit:Array<String> = [
 		'story_mode',
 		'freeplay',
-		'credits',
+		'awards',
 		'options'
 	];
 
@@ -62,6 +63,7 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
+		menuItemScreenCenter = true;
 		super.create();
 
 		// Updating Discord Rich Presence
@@ -176,6 +178,7 @@ class MainMenuState extends MusicBeatState
 	}
 
 	var selectedSomethin:Bool = false;
+	public var mouseAccept:Bool = false;
 
 	override function update(elapsed:Float)
 	{
@@ -190,6 +193,12 @@ class MainMenuState extends MusicBeatState
 
 		if (!selectedSomethin)
 		{
+			if (mouseAccept)
+			{
+				mouseAccept = false;
+				acceptMenuItem();
+			}
+
 			if (controls.UI_UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
@@ -210,60 +219,70 @@ class MainMenuState extends MusicBeatState
 			}
 
 			if (controls.ACCEPT)
-			{
-				if (optionShit[curSelected] == 'donate')
-				{
-					CoolUtil.browserLoad('https://ninja-muffin24.itch.io/funkin');
-				}
-				else
-				{
-					selectedSomethin = true;
-					FlxG.sound.play(Paths.sound('confirmMenu'));
-
-					menuItems.forEach(function(spr:FlxSprite)
-					{
-						if (curSelected != spr.ID)
-						{
-							FlxTween.tween(spr, {alpha: 0}, 0.4, {
-								ease: FlxEase.quadOut,
-								onComplete: function(twn:FlxTween)
-								{
-									spr.kill();
-								}
-							});
-						}
-						else
-						{
-							new FlxTimer().start(1, function(timer:FlxTimer)
-							{
-								var daChoice:String = optionShit[curSelected];
-
-								switch (daChoice)
-								{
-									case 'story_mode':
-										MusicBeatState.switchState(new StoryMenuState());
-									case 'freeplay':
-										MusicBeatState.switchState(new FreeplayState());
-									case 'awards':
-										LoadingState.loadAndSwitchState(new AchievementsMenuState());
-									case 'credits':
-										MusicBeatState.switchState(new CreditsState());
-									case 'options':
-										LoadingState.loadAndSwitchState(new funkin.ui.options.OptionsState());
-								}
-							});
-						}
-					});
-				}
-			}
+				acceptMenuItem();
 		}
 
 		super.update(elapsed);
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			spr.screenCenter(X);
+			if (menuItemScreenCenter)
+				spr.screenCenter(X);
 		});
+	}
+
+	public function selectMenuItem(index:Int):Void
+	{
+		if (index < 0 || index >= menuItems.length || selectedSomethin) return;
+		changeItem(index - curSelected);
+	}
+
+	public function acceptMenuItem():Void
+	{
+		if (selectedSomethin) return;
+		if (optionShit[curSelected] == 'donate')
+		{
+			CoolUtil.browserLoad('https://ninja-muffin24.itch.io/funkin');
+		}
+		else
+		{
+			selectedSomethin = true;
+			FlxG.sound.play(Paths.sound('confirmMenu'));
+
+			menuItems.forEach(function(spr:FlxSprite)
+			{
+				if (curSelected != spr.ID)
+				{
+					FlxTween.tween(spr, {alpha: 0}, 0.4, {
+						ease: FlxEase.quadOut,
+						onComplete: function(twn:FlxTween)
+						{
+							spr.kill();
+						}
+					});
+				}
+				else
+				{
+					new FlxTimer().start(1, function(timer:FlxTimer)
+					{
+						var daChoice:String = optionShit[curSelected];
+						switch (daChoice)
+						{
+							case 'story_mode':
+								MusicBeatState.switchState(new StoryMenuState());
+							case 'freeplay':
+								MusicBeatState.switchState(new FreeplayState());
+							case 'awards':
+								LoadingState.loadAndSwitchState(new AchievementsMenuState());
+							case 'credits':
+								MusicBeatState.switchState(new CreditsState());
+							case 'options':
+								LoadingState.loadAndSwitchState(new funkin.ui.options.OptionsState());
+						}
+					});
+				}
+			});
+		}
 	}
 
 	function changeItem(huh:Int = 0)
