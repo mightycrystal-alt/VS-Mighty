@@ -45,10 +45,8 @@
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3"  unless="web"/>
 
-	<!-- DONT ENABLE THIS -->
 	<define name="CHECK_FOR_UPDATES" if="desktop officialBuild"/>
 
-	<!-- <define name="PRELOAD_ALL" /> -->
 	<define name="PRELOAD_ALL" unless="web" />
 	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
 	
@@ -102,7 +100,7 @@
 	-->
 	<assets path="assets/fonts" />
 
-	<assets path='mod' rename='modding' embed='false'/>
+	<assets path='modding' embed='false'/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

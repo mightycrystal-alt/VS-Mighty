@@ -4,9 +4,11 @@ import hscript.Expr;
 import hscript.Interp;
 import hscript.Parser;
 import haxe.io.Path;
+import Lambda;
 #if sys
 import sys.FileSystem;
 import sys.io.File;
+import Sys;
 #end
 import flixel.FlxG;
 import flixel.FlxBasic;
@@ -14,18 +16,33 @@ import flixel.FlxSprite;
 import flixel.FlxCamera;
 import flixel.math.FlxMath;
 import flixel.sound.FlxSound;
+import flixel.system.FlxAssets;
 import flixel.text.FlxText;
+import flixel.addons.text.FlxTypeText;
+import flixel.group.FlxGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
+import flixel.util.FlxColor;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import openfl.display.BlendMode;
+import openfl.utils.Assets;
 import lime.app.Application;
+import Main;
 import funkin.Conductor;
+import funkin.CoolUtil;
 import Paths;
 import funkin.Preferences;
+import funkin.play.components.Section;
 import funkin.play.PlayState;
+import funkin.ui.MusicBeatState;
+import funkin.play.Song;
+import funkin.play.character.Character;
+import funkin.play.components.HealthIcon;
+import funkin.play.components.Note;
+import funkin.play.components.StrumNote;
+import funkin.graphics.Alphabet;
 import funkin.ui.mainmenu.MainMenuState;
 
 using StringTools;
@@ -373,24 +390,48 @@ class HScript
 			'Xml' => Xml,
 			'Type' => Type,
 			'Date' => Date,
+			'Lambda' => Lambda,
+			#if sys
+			'Sys' => Sys,
+			#end
+			'Assets' => Assets,
+			'Main' => Main,
 			'FlxG' => FlxG,
 			'FlxBasic' => FlxBasic,
 			'FlxSprite' => FlxSprite,
 			'FlxCamera' => FlxCamera,
 			'FlxMath' => FlxMath,
 			'FlxSound' => FlxSound,
+			'FlxAssets' => FlxAssets,
 			'FlxText' => FlxText,
+			'FlxTypeText' => FlxTypeText,
+			'FlxGroup' => FlxGroup,
 			'FlxTypedGroup' => FlxTypedGroup,
 			'FlxSpriteGroup' => FlxSpriteGroup,
 			'FlxTween' => FlxTween,
 			'FlxEase' => FlxEase,
 			'FlxTimer' => FlxTimer,
 			'ADD' => BlendMode.ADD,
+			'MULTIPLY' => BlendMode.MULTIPLY,
+			'BlendMode' => {
+				ADD: BlendMode.ADD,
+				MULTIPLY: BlendMode.MULTIPLY
+			},
 			'Application' => Application,
 			'Paths' => Paths,
+			'CoolUtil' => CoolUtil,
 			'Preferences' => Preferences,
+			'MusicBeatState' => MusicBeatState,
 			'PlayState' => PlayState,
 			'MainMenuState' => MainMenuState,
+			'TitleState' => funkin.ui.title.TitleState,
+			'Song' => Song,
+			'Character' => Character,
+			'HealthIcon' => HealthIcon,
+			'Note' => Note,
+			'StrumNote' => StrumNote,
+			'Section' => Section,
+			'Alphabet' => Alphabet,
 			'Conductor' => Conductor,
 			'state' => state,
 			'window' => Application.current.window,
