@@ -32,12 +32,15 @@ using StringTools;
 
 class EditorPlayState extends MusicBeatState
 {
+	private static inline var STRUM_SCALE:Float = 0.85;
+
 	// Yes, this is mostly a copy of PlayState, it's kinda dumb to make a direct copy of it but... ehhh
 	private var strumLine:FlxSprite;
 	private var comboGroup:FlxTypedGroup<FlxSprite>;
 	public var strumLineNotes:FlxTypedGroup<StrumNote>;
 	public var opponentStrums:FlxTypedGroup<StrumNote>;
 	public var playerStrums:FlxTypedGroup<StrumNote>;
+	public var thirdStrums:FlxTypedGroup<StrumNote>;
 	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
 	public var notes:FlxTypedGroup<Note>;
@@ -97,10 +100,13 @@ class EditorPlayState extends MusicBeatState
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
 		opponentStrums = new FlxTypedGroup<StrumNote>();
 		playerStrums = new FlxTypedGroup<StrumNote>();
+		thirdStrums = new FlxTypedGroup<StrumNote>();
 		add(strumLineNotes);
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
+		if (PlayState.SONG.tripleStrumline)
+			generateStaticArrows(2);
 		/*if(Preferences.data.middleScroll) {
 			opponentStrums.forEachAlive(function (note:StrumNote) {
 				note.visible = false;
@@ -114,7 +120,7 @@ class EditorPlayState extends MusicBeatState
 		grpNoteSplashes.add(splash);
 		splash.alpha = 0.0;
 		
-		if (PlayState.SONG.needsVoices)
+		if (PlayState.SONG.needsVoices && Paths.voicesExists(PlayState.SONG.song))
 			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
 		else
 			vocals = new FlxSound();
@@ -217,12 +223,14 @@ class EditorPlayState extends MusicBeatState
 				if (songNotes[1] > 3)
 					gottaHitNote = !section.mustHitSection;
 
+				final isThirdLine:Bool = PlayState.SONG.tripleStrumline && songNotes[1] >= 8;
 				final leNoteData: ChartNoteData = {
 					time: songNotes[0],
 					id: Std.int(songNotes[1] % 4),
 					sLen: songNotes[2],
 					strumLine: gottaHitNote ? 1 : 0,
-					isGfNote: (section.gfSection && (songNotes[1]<4)),
+					isGfNote: isThirdLine || (section.gfSection && (songNotes[1]<4)),
+					tripleLane: isThirdLine,
 					type: songNotes[3]
 				};
 				if(!Std.isOfType(songNotes[3], String))
@@ -252,10 +260,13 @@ class EditorPlayState extends MusicBeatState
 				oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
 			var swagNote:Note = new Note(note.time, note.id, oldNote);
-			swagNote.mustPress = note.strumLine == 1;
+			swagNote.mustPress = note.strumLine == 1 && !note.isGfNote;
 			swagNote.sustainLength = note.sLen;
 			swagNote.gfNote = note.isGfNote;
+			swagNote.extraData.set('tripleStrumline', note.tripleLane == true);
 			swagNote.noteType = note.type;
+			swagNote.setGraphicSize(Std.int(swagNote.width * STRUM_SCALE));
+			swagNote.updateHitbox();
 
 			swagNote.scrollFactor.set();
 
@@ -273,9 +284,12 @@ class EditorPlayState extends MusicBeatState
 					var sustainNote:Note = new Note(
 						note.time + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet
 							/ FlxMath.roundDecimal(PlayState.instance.songSpeed, 2)), note.id, oldNote, true);
-					sustainNote.mustPress = note.strumLine == 1;
+					sustainNote.mustPress = note.strumLine == 1 && !note.isGfNote;
 					sustainNote.gfNote = note.isGfNote;
+					sustainNote.extraData.set('tripleStrumline', note.tripleLane == true);
 					sustainNote.noteType = swagNote.noteType;
+					sustainNote.setGraphicSize(Std.int(sustainNote.width * STRUM_SCALE));
+					sustainNote.updateHitbox();
 					sustainNote.scrollFactor.set();
 					swagNote.tail.push(sustainNote);
 					sustainNote.parent = swagNote;
@@ -394,7 +408,11 @@ class EditorPlayState extends MusicBeatState
 				var strumX:Float = 0;
 				var strumY:Float = 0;
 				var strumAlpha:Float = 0;
-				if(daNote.mustPress) {
+				if(daNote.extraData.get('tripleStrumline') == true) {
+					strumX = thirdStrums.members[daNote.noteData].x;
+					strumY = thirdStrums.members[daNote.noteData].y;
+					strumAlpha = thirdStrums.members[daNote.noteData].alpha;
+				} else if(daNote.mustPress) {
 					strumX = playerStrums.members[daNote.noteData].x;
 					strumY = playerStrums.members[daNote.noteData].y;
 					strumAlpha = playerStrums.members[daNote.noteData].alpha;
@@ -472,7 +490,17 @@ class EditorPlayState extends MusicBeatState
 					if(daNote.isSustainNote && !daNote.animation.curAnim.name.endsWith('end')) {
 						time += 0.15;
 					}
-					StrumPlayAnim(true, Std.int(Math.abs(daNote.noteData)) % 4, time);
+					if (daNote.extraData.get('tripleStrumline') == true)
+					{
+						var thirdStrum:StrumNote = thirdStrums.members[Std.int(Math.abs(daNote.noteData)) % 4];
+						if (thirdStrum != null)
+						{
+							thirdStrum.playAnim('confirm', true);
+							thirdStrum.resetAnim = time;
+						}
+					}
+					else
+						StrumPlayAnim(true, Std.int(Math.abs(daNote.noteData)) % 4, time);
 					daNote.hitByOpponent = true;
 
 					if (!daNote.isSustainNote)
@@ -941,12 +969,17 @@ class EditorPlayState extends MusicBeatState
 				else if(Preferences.data.middleScroll) targetAlpha = 0.35;
 			}
 
-			var babyArrow:StrumNote = new StrumNote(Preferences.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X, strumLine.y, i, player);
+			var strumX:Float = Preferences.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X;
+			var babyArrow:StrumNote = new StrumNote(strumX, strumLine.y, i, player);
 			babyArrow.alpha = targetAlpha;
 
 			if (player == 1)
 			{
 				playerStrums.add(babyArrow);
+			}
+			else if (player == 2)
+			{
+				thirdStrums.add(babyArrow);
 			}
 			else
 			{
@@ -962,6 +995,18 @@ class EditorPlayState extends MusicBeatState
 
 			strumLineNotes.add(babyArrow);
 			babyArrow.postAddedToGroup();
+			if (player == 0)
+				babyArrow.x -= 60;
+			else if (player == 1)
+				babyArrow.x -= FlxG.width / 4;
+			else if (player == 2)
+			{
+				babyArrow.x -= FlxG.width / 2;
+				babyArrow.x += 60;
+			}
+			babyArrow.x -= i * Note.swagWidth * (1 - STRUM_SCALE);
+			babyArrow.setGraphicSize(Std.int(babyArrow.width * STRUM_SCALE));
+			babyArrow.updateHitbox();
 		}
 	}
 

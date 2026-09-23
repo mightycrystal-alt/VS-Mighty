@@ -9,7 +9,6 @@ import funkin.CoolUtil;
 import funkin.api.discord.Discord;
 import funkin.ui.FlashingState;
 import funkin.ui.freeplay.FreeplayState;
-import funkin.api.gamejolt.GameJolt;
 import funkin.Highscore;
 import funkin.ui.mainmenu.MainMenuState;
 import funkin.ui.MusicBeatState;
@@ -48,7 +47,6 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 import openfl.Assets;
-import funkin.api.gamejolt.GameJolt.GameJoltAPI;
 
 using StringTools;
 typedef TitleData =
@@ -94,9 +92,6 @@ class TitleState extends MusicBeatState
 	{
 		super.create();
 		RankedStats.load();
-
-				GameJoltAPI.connect();
-        GameJoltAPI.authDaUser(FlxG.save.data.gjUser, FlxG.save.data.gjToken);
 
 		swagShader = new ColorSwap();
 		curWacky = FlxG.random.getObject(getIntroTextShit());

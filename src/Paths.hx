@@ -35,7 +35,7 @@ class Paths
 	public static var ignoreModFolders:Array<String> = [
 		'characters', 'custom_events', 'custom_notetypes', 'data', 'songs',
 		'music', 'sounds', 'shaders', 'videos', 'images', 'stages', 'weeks',
-		'fonts', 'scripts', 'achievements'
+		'fonts', 'scripts', 'custom_notes', 'achievements'
 	];
 
 	public static function excludeAsset(key:String) {
@@ -203,6 +203,12 @@ class Paths
 		var songKey:String = '${formatToSongPath(song)}/Voices';
 		var voices = returnSound('songs', songKey);
 		return voices;
+	}
+
+	inline static public function voicesExists(song:String):Bool
+	{
+		var songKey:String = '${formatToSongPath(song)}/Voices.$SOUND_EXT';
+		return fileExists('songs/$songKey', SOUND);
 	}
 
 	inline static public function inst(song:String):Any

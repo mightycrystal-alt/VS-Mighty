@@ -26,13 +26,12 @@ import flixel.util.FlxTimer;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
 import funkin.input.Controls;
-import funkin.api.gamejolt.GameJolt;
 
 using StringTools;
 
 class OptionsState extends MusicBeatState
 {
-	var options:Array<String> = ['Notes', 'Controls', 'Login', 'Gameplay'];
+	var options:Array<String> = ['Notes', 'Controls', 'Gameplay'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
@@ -45,8 +44,6 @@ class OptionsState extends MusicBeatState
 				openSubState(new funkin.ui.options.ControlsSubState());
 			case 'Gameplay':
 				openSubState(new funkin.ui.options.GameplaySettingsSubState());
-			case 'Login':
-				FlxG.switchState(new GameJoltLogin());
 		}
 	}
 

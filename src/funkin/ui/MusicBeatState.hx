@@ -21,6 +21,7 @@ import funkin.input.Controls;
 import funkin.ui.transition.CustomFadeTransition;
 import funkin.play.PlayState;
 import funkin.play.components.Section;
+import funkin.scripting.HScript;
 class MusicBeatState extends FlxUIState
 {
 	private var curSection:Int = 0;
@@ -42,6 +43,7 @@ class MusicBeatState extends FlxUIState
 		camBeat = FlxG.camera;
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		super.create();
+		HScript.init(this);
 
 		if(!skip) {
 			openSubState(new CustomFadeTransition(0.7, true));
@@ -51,6 +53,7 @@ class MusicBeatState extends FlxUIState
 
 	override function update(elapsed:Float)
 	{
+		HScript.update(this, elapsed);
 		//everyStep();
 		var oldStep:Int = curStep;
 
@@ -159,18 +162,27 @@ class MusicBeatState extends FlxUIState
 
 	public function stepHit():Void
 	{
+		HScript.stepHit();
 		if (curStep % 4 == 0)
 			beatHit();
 	}
 
 	public function beatHit():Void
 	{
+		HScript.beatHit();
 		//trace('Beat: ' + curBeat);
 	}
 
 	public function sectionHit():Void
 	{
+		HScript.sectionHit();
 		//trace('Section: ' + curSection + ', Beat: ' + curBeat + ', Step: ' + curStep);
+	}
+
+	override function destroy():Void
+	{
+		HScript.clear(this);
+		super.destroy();
 	}
 
 	function getBeatsOnSection()

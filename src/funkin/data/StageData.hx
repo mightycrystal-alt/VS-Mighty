@@ -73,12 +73,12 @@ class StageData {
 		var modPath:String = Paths.modFolders('stages/' + stage + '.json');
 		if (FileSystem.exists(modPath)) rawJson = File.getContent(modPath);
 
-		if(rawJson == null && Assets.exists(path)) {
-			rawJson = Assets.getText(path);
-		}
-		else
+		if(rawJson == null)
 		{
-			return null;
+			if(Assets.exists(path))
+				rawJson = Assets.getText(path);
+			else
+				return null;
 		}
 		return cast Json.parse(rawJson);
 	}

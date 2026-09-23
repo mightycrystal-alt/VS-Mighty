@@ -61,6 +61,8 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
+		super.create();
+
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		debugKeys = Preferences.keyBinds.get('debug_1').copy();
@@ -136,10 +138,17 @@ class MainMenuState extends MusicBeatState
 		FlxG.camera.follow(camFollowPos, null, 1);
 
 		#if !FINAL_BUILD
+		#if !debug
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Shard Engine v" + rankedVer + " (Unstable)", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
+		#else
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Shard Engine v" + rankedVer + " (DEBUG)", 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+		#end
 		#end
 		#if FINAL_BUILD
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Shard Engine v" + rankedVer, 12);
@@ -163,7 +172,6 @@ class MainMenuState extends MusicBeatState
 			Achievements.unlock('friday_night_play');
 		#end
 
-		super.create();
 	}
 
 	var selectedSomethin:Bool = false;

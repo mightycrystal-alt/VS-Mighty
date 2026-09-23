@@ -539,10 +539,9 @@ class ChartingState extends MusicBeatState
 		stepperSpeed.value = _song.speed;
 		stepperSpeed.name = 'song_speed';
 		blockPressWhileTypingOnStepper.push(stepperSpeed);
-		var directories:Array<String> = [Paths.getPreloadPath('characters/')];
-
 		var tempMap:Map<String, Bool> = new Map<String, Bool>();
-		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
+		var characters:Array<String> = CoolUtil.coolTextFile(Paths.getTextFromFile('data/characterList.txt'));
+		appendModAssetNames(characters, 'characters');
 		for (i in 0...characters.length) {
 			tempMap.set(characters[i], true);
 		}
@@ -572,10 +571,8 @@ class ChartingState extends MusicBeatState
 		player2DropDown.selectedLabel = _song.player2;
 		blockPressWhileScrolling.push(player2DropDown);
 
-		var directories:Array<String> = [Paths.getPreloadPath('stages/')];
-
 		tempMap.clear();
-		var stageFile:Array<String> = CoolUtil.coolTextFile(Paths.txt('stageList'));
+		var stageFile:Array<String> = CoolUtil.coolTextFile(Paths.getTextFromFile('data/stageList.txt'));
 		var stages:Array<String> = [];
 		for (i in 0...stageFile.length) { //Prevent duplicates
 			var stageToCheck:String = stageFile[i];
@@ -584,6 +581,7 @@ class ChartingState extends MusicBeatState
 			}
 			tempMap.set(stageToCheck, true);
 		}
+		appendModAssetNames(stages, 'stages');
 		if(stages.length < 1) stages.push('stage');
 
 		stageDropDown = new FlxUIDropDownMenuCustom(player1DropDown.x + 140, player1DropDown.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray(stages, true), function(character:String)
@@ -1313,9 +1311,9 @@ class ChartingState extends MusicBeatState
 			// vocals.stop();
 		}
 
-		var file:Dynamic = Paths.voices(currentSongName);
 		vocals = new FlxSound();
-		if (Std.isOfType(file, Sound) || OpenFlAssets.exists(file)) {
+		if (Paths.voicesExists(currentSongName)) {
+			var file:Dynamic = Paths.voices(currentSongName);
 			vocals.loadEmbedded(file);
 			FlxG.sound.list.add(vocals);
 		}
@@ -2475,16 +2473,49 @@ class ChartingState extends MusicBeatState
 
 	function loadHealthIconFromCharacter(char:String) {
 		var characterPath:String = 'characters/' + char + '.json';
-		var path:String = Paths.getPreloadPath(characterPath);
+		var path:String = Paths.modFolders(characterPath);
+		#if sys
+		if (!FileSystem.exists(path)) path = Paths.getPreloadPath(characterPath);
+		if (!FileSystem.exists(path) && !OpenFlAssets.exists(path))
+		#else
 		if (!OpenFlAssets.exists(path))
+		#end
 		{
-			path = Paths.getPreloadPath('characters/' + Character.DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
+			path = Paths.modFolders('characters/' + Character.DEFAULT_CHARACTER + '.json');
+			#if sys
+			if (!FileSystem.exists(path)) path = Paths.getPreloadPath('characters/' + Character.DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
+			#else
+			if (!OpenFlAssets.exists(path)) path = Paths.getPreloadPath('characters/' + Character.DEFAULT_CHARACTER + '.json');
+			#end
 		}
 
-		var rawJson = OpenFlAssets.getText(path);
+		var rawJson:String;
+		#if sys
+		rawJson = FileSystem.exists(path) ? File.getContent(path) : OpenFlAssets.getText(path);
+		#else
+		rawJson = OpenFlAssets.getText(path);
+		#end
 
 		var json:CharacterFile = cast Json.parse(rawJson);
 		return json.healthicon;
+	}
+
+	function appendModAssetNames(names:Array<String>, folder:String):Void {
+		#if sys
+		var directories:Array<String> = [Paths.modFolders(folder)];
+		for (mod in Paths.getModDirectories()) {
+			directories.push(Paths.mods(mod) + '/' + folder);
+		}
+
+		for (directory in directories) {
+			if (!FileSystem.exists(directory) || !FileSystem.isDirectory(directory)) continue;
+			for (file in FileSystem.readDirectory(directory)) {
+				if (!file.endsWith('.json')) continue;
+				var name:String = file.substr(0, file.length - 5);
+				if (!names.contains(name)) names.push(name);
+			}
+		}
+		#end
 	}
 
 	function updateNoteUI():Void

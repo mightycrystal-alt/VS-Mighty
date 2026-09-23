@@ -10,6 +10,7 @@ import funkin.play.character.Character;
 import funkin.ui.debug.CharacterEditorState;
 import funkin.ui.debug.charting.ChartParser;
 import funkin.ui.debug.charting.ChartingState;
+import funkin.scripting.HScript;
 import funkin.Preferences;
 import funkin.Conductor;
 import funkin.CoolUtil;
@@ -19,7 +20,6 @@ import funkin.play.cutscene.dialogue.DialogueBox;
 import funkin.api.discord.Discord;
 import funkin.play.components.Note;
 import funkin.ui.freeplay.FreeplayState;
-import funkin.api.gamejolt.GameJolt;
 import funkin.play.components.HealthIcon;
 import funkin.Highscore;
 import funkin.ui.transition.LoadingState;
@@ -71,7 +71,6 @@ import openfl.events.KeyboardEvent;
 import funkin.achievements.Achievements;
 import funkin.data.StageData;
 import funkin.play.cutscene.dialogue.DialogueBoxPsych;
-import funkin.api.gamejolt.GameJolt.GameJoltAPI;
 #if !flash
 import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
@@ -2232,6 +2231,7 @@ class PlayState extends MusicBeatState
 		#if FLX_PITCH FlxG.sound.music.pitch = playbackRate; #end
 		FlxG.sound.music.onComplete = finishSong.bind();
 		vocals.play();
+		HScript.songStart();
 
 		if (startOnTime > 0)
 		{
@@ -2290,7 +2290,7 @@ class PlayState extends MusicBeatState
 
 		curSong = songData.song;
 
-		if (SONG.needsVoices)
+		if (SONG.needsVoices && Paths.voicesExists(PlayState.SONG.song))
 			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
 		else
 			vocals = new FlxSound();
@@ -2397,6 +2397,7 @@ class PlayState extends MusicBeatState
 				swagNote.copyAlpha = false;
 			}
 			swagNote.noteType = note.type;
+				HScript.noteCreate(swagNote);
 			swagNote.scrollFactor.set();
 			var susLength:Float = swagNote.sustainLength;
 
@@ -2423,6 +2424,7 @@ class PlayState extends MusicBeatState
 						sustainNote.copyAlpha = false;
 					}
 					sustainNote.noteType = swagNote.noteType;
+					HScript.noteCreate(sustainNote);
 					sustainNote.scrollFactor.set();
 					swagNote.tail.push(sustainNote);
 					sustainNote.parent = swagNote;
@@ -2784,6 +2786,7 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+
 		switch (curStage)
 		{
 			case 'tank':
@@ -3159,6 +3162,7 @@ class PlayState extends MusicBeatState
 				var fakeCrochet:Float = (60 / SONG.bpm) * 1000;
 				notes.forEachAlive(function(daNote:Note)
 				{
+					HScript.noteUpdate(daNote, elapsed);
 					var strumGroup:FlxTypedGroup<StrumNote> = playerStrums;
 					if (!daNote.mustPress)
 						strumGroup = opponentStrums;
@@ -3393,6 +3397,7 @@ class PlayState extends MusicBeatState
 
 	public function triggerEventNote(eventName:String, value1:String, value2:String)
 	{
+		HScript.event(eventName, value1, value2);
 		switch (eventName)
 		{
 			case 'Dadbattle Spotlight':
@@ -4535,6 +4540,7 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(daNote:Note):Void
 	{ // You didn't hit the key and let it go offscreen, also used by Hurt Notes
+		HScript.noteMiss(daNote);
 		// Dupe note remove
 		notes.forEachAlive(function(note:Note)
 		{
@@ -4628,6 +4634,7 @@ RankedStats.save();
 
 	function opponentNoteHit(note:Note):Void
 	{
+		HScript.noteOpponentHit(note);
 		if (Paths.formatToSongPath(SONG.song) != 'tutorial')
 			camZooming = true;
 
@@ -4705,6 +4712,7 @@ RankedStats.save();
 
 	function goodNoteHit(note:Note):Void
 	{
+		HScript.noteGoodHit(note);
 		if (note.wasGoodHit)
 			return;
 		if (cpuControlled && note.ignoreNote)
